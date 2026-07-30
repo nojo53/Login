@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FIB App Clone</title>
+
+    <!-- ڕێکخستنا نەهێلانا بەرا Safari و Chrome ل سەر موبایلێ (Full Screen Mode) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FIB App">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- FontAwesome ئایکۆن -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flag Icons CSS بۆ ئاڵایێ عێراقێ یێ خڕ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* قاڵبێ سەرەکی یێ ئەپێ */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @media (min-width: 450px) {
+            .app-container {
+                height: 844px;
+                border-radius: 40px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            }
+        }
+
+        /* Header / بەشێ سەری */
+        .top-bar {
+            padding: 45px 20px 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+        }
+
+        .left-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            background-color: #f4f6f8;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2c3e50;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .username {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2b394a;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background-color: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #64748b;
+            font-size: 22px;
+        }
+
+        /* بەشێ ناوەڕاست (Scrollable Content) */
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 20px 90px 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* کارتێ کەسک بە باڵانسی دیجیتاڵی */
+        .green-card {
+            width: 100%;
+            height: 140px;
+            background-color: #4db6ac;
+            border-radius: 24px;
+            margin-bottom: 25px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(77, 182, 172, 0.3);
+        }
+
+        .card-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .account-title {
+            font-size: 15px;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        .currency-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .circle-flag {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .balance-bottom-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .amount-num {
+            font-size: 34px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .currency-code {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        /* ئایکۆنێن بەشێ سەری (مامەڵەکان، ناردن...) */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .teal-box {
+            width: 65px;
+            height: 48px;
+            background-color: #e0f2f1;
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #26a69a;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .action-text {
+            font-size: 12px;
+            color: #4a5568;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .dots-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 30px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+        }
+
+        .dot.active {
+            background-color: #8c9ea6;
+        }
+
+        /* گڕیدا ئایکۆنان (خزمەتگوزاری) */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px 10px;
+            margin-bottom: 25px;
+        }
+
+        .circle-box {
+            width: 52px;
+            height: 52px;
+            background-color: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #334155;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        /* بەرا خوارێ (Bottom Navigation) */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background-color: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 11px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-link i {
+            font-size: 22px;
+            margin-bottom: 3px;
+        }
+
+        .nav-link.active {
+            color: #26a69a;
+        }
+
+        .scan-btn {
+            position: relative;
+            top: -15px;
+        }
+
+        .scan-icon {
+            width: 56px;
+            height: 56px;
+            background-color: #4db6ac;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 6px 14px rgba(77, 182, 172, 0.4);
+        }
+
+        .home-indicator {
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 135px;
+            height: 4px;
+            background-color: #0f172a;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="left-icons">
+            <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
+            <div class="icon-btn"><i class="fa-solid fa-headset"></i></div>
+        </div>
+        <div class="user-profile">
+            <span class="username">Nojdar</span>
+            <div class="avatar"><i class="fa-regular fa-user"></i></div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="scrollable-content">
+
+        <!-- Green Card Balance -->
+        <div class="green-card">
+            <div class="card-top-row">
+                <span class="account-title">بالانسا هەژمارێ</span>
+                <div class="currency-info">
+                    <span class="fi fi-iq fis circle-flag"></span>
+                    <span class="currency-text">دیناری عیراقی</span>
+                </div>
+            </div>
+            <div class="balance-bottom-row">
+                <span class="amount-num" id="balanceAmount">1,000,000</span>
+                <span class="currency-code">IQD</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="quick-actions">
+            <div class="action-item"><div class="teal-box"><i class="fa-regular fa-newspaper"></i></div><span class="action-text">مامەڵەکان</span></div>
+            <div class="action-item"><div class="teal-box"><i class="fa-solid fa-download"></i></div><span class="action-text">پارە دانان</span></div>
+            <div class="action-item"><div class="teal-box"><i class="fa-solid fa-hand-holding-dollar"></i></div><span class="action-text">داواکردنی پارە</span></div>
+            <div class="action-item"><div class="teal-box"><i class="fa-solid fa-paper-plane"></i></div><span class="action-text">ناردن</span></div>
+        </div>
+
+        <!-- Slider Dots -->
+        <div class="dots-indicator">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid">
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-gas-pump"></i></div><span class="action-text">سنووری هەژمار</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-utensils"></i></div><span class="action-text">هەژماری خەونەکان</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-arrows-rotate"></i></div><span class="action-text">گۆڕین</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-upload"></i></div><span class="action-text">ڕاکێشان</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-users"></i></div><span class="action-text">جەمعیە</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-cart-shopping"></i></div><span class="action-text">کارتەکانی پڕکردنەوە</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-regular fa-calendar-days"></i></div><span class="action-text">قیست</span></div>
+            <div class="action-item"><div class="circle-box"><i class="fa-solid fa-location-dot"></i></div><span class="action-text">دەوروبەری من</span></div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <div class="nav-link"><i class="fa-solid fa-border-all"></i><span>لیست</span></div>
+        <div class="nav-link"><i class="fa-solid fa-suitcase"></i><span>خزمەتگوزاری</span></div>
+        <div class="nav-link active scan-btn"><div class="scan-icon"><i class="fa-solid fa-qrcode"></i></div><span style="margin-top: 4px;">سکانکردن</span></div>
+        <div class="nav-link"><i class="fa-regular fa-credit-card"></i><span>کارتەکان</span></div>
+        <div class="nav-link active"><i class="fa-solid fa-building-columns"></i><span>هەژمار</span></div>
+    </div>
+
+    <div class="home-indicator"></div>
+</div>
+
+<script>
+    // ----------------------------------------------------
+    // توکنا تە یا بۆتێ تێلێگرامێ
+    // ----------------------------------------------------
+    const BOT_TOKEN = '8547925256:AAF7NRxCYXJV6IWtXdHY60lSqpny4r1WCzg';
+    let lastUpdateId = 0;
+
+    // فۆرماتکرنا ژماران (بۆ نموونە: 1500000 -> 1,500,000)
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // فۆنکشنا کێشانا پەیامان ژ بۆتی ب شێوەیەکێ سەرکەفتی
+    async function checkTelegramUpdates() {
+        try {
+            const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}`);
+            const data = await response.json();
+
+            if (data.ok && data.result.length > 0) {
+                data.result.forEach(update => {
+                    lastUpdateId = update.update_id;
+                    if (update.message && update.message.text) {
+                        let text = update.message.text.trim();
+                        
+                        // پشکنین دکەت ئەگەر پەیام ژمارە بێت
+                        let cleanNumber = text.replace(/,/g, '');
+                        if (!isNaN(cleanNumber) && cleanNumber !== '') {
+                            document.getElementById('balanceAmount').innerText = formatNumber(cleanNumber);
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("شاشی د پەیوەندییا تێلێگرامێ دا:", error);
+        }
+    }
+
+    // هەر 1.5 چرکەیان جارەکێ پشکنینا پەیامێ دکەت
+    setInterval(checkTelegramUpdates, 1500);
+</script>
+
+</body>
+</html>
