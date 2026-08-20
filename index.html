@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ali Baba - Form Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 320px;
+            text-align: center;
+        }
+        .login-card h2 {
+            color: #ff6a00;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff6a00;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #e05d00;
+        }
+        #welcome-message {
+            margin-top: 15px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h2>Ali Baba</h2>
+    <form id="loginForm">
+        <div class="input-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Username daxil bike" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Password daxil bike" required>
+        </div>
+        <button type="submit">Têkeve</button>
+    </form>
+
+    <div id="welcome-message"></div>
+</div>
+
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    const CORRECT_USER = "noJdar12$$";
+    const CORRECT_PASS = "noJdar12$$";
+
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        if (username === CORRECT_USER && password === CORRECT_PASS) {
+            const hasVisited = localStorage.getItem('visited_noJdar');
+
+            if (hasVisited) {
+                welcomeMessage.style.color = "#27ae60";
+                welcomeMessage.innerHTML = `Tu bixêr hatî ve bo malpera Ali Baba, <strong>${username}</strong>!`;
+            } else {
+                welcomeMessage.style.color = "#27ae60";
+                welcomeMessage.innerHTML = `Hate tomarkirin! Tu bixêr hatî bo Ali Baba, <strong>${username}</strong>.`;
+                localStorage.setItem('visited_noJdar', 'true');
+            }
+        } else {
+            welcomeMessage.style.color = "#e74c3c";
+            welcomeMessage.innerHTML = "Username yan jî Password خەلەتە!";
+        }
+    });
+</script>
+
+</body>
+</html>
