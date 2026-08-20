@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ku">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ali Baba - Console Simulator</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+        }
+        #console {
+            background-color: #000;
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            margin: 0 auto;
+            min-height: 300px;
+        }
+        .input-line {
+            display: flex;
+            margin-top: 10px;
+        }
+        input {
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+        }
+        .output {
+            white-space: pre-wrap;
+            margin-bottom: 5px;
+        }
+        .error {
+            color: #ff3333;
+        }
+        .success {
+            color: #33ff33;
+        }
+    </style>
+</head>
+<body>
+
+<div id="console">
+    <div class="output">=== BIXER HATIN BO SISTEMA ALI BABA ===</div>
+    <div id="logs"></div>
+    <div class="input-line">
+        <span id="prompt">Username daxil bike: </span>
+        <input type="text" id="termInput" autofocus>
+    </div>
+</div>
+
+<script>
+    const termInput = document.getElementById('termInput');
+    const promptText = document.getElementById('prompt');
+    const logs = document.getElementById('logs');
+
+    const CORRECT_USER = "noJdar12$$";
+    const CORRECT_PASS = "noJdar12$$";
+
+    let step = "USER"; // USER, PASS, AGAIN
+    let currentUsername = "";
+    let hasVisited = false;
+
+    function addLog(text, className = "") {
+        const div = document.createElement('div');
+        div.className = "output " + className;
+        div.textContent = text;
+        logs.appendChild(div);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    termInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const val = termInput.value.trim();
+            termInput.value = "";
+
+            if (step === "USER") {
+                addLog("Username daxil bike: " + val);
+                currentUsername = val;
+                step = "PASS";
+                promptText.textContent = "Password daxil bike: ";
+                termInput.type = "password";
+            } 
+            else if (step === "PASS") {
+                addLog("Password daxil bike: ********");
+                
+                if (currentUsername === CORRECT_USER && val === CORRECT_PASS) {
+                    if (hasVisited) {
+                        addLog("--------------------------------------------");
+                        addLog("Tu bixer hati ve bo malpera Ali Baba, " + currentUsername + "!", "success");
+                        addLog("--------------------------------------------");
+                    } else {
+                        addLog("--------------------------------------------");
+                        addLog("Tu bixer hati bo Ali Baba, " + currentUsername + "!", "success");
+                        addLog("--------------------------------------------");
+                        hasVisited = true;
+                    }
+                } else {
+                    addLog("--------------------------------------------");
+                    addLog("XALAT! Username yan ji Password xelete.", "error");
+                    addLog("--------------------------------------------");
+                }
+
+                step = "AGAIN";
+                promptText.textContent = "Te divet careka din tekevi? (y/n): ";
+                termInput.type = "text";
+            } 
+            else if (step === "AGAIN") {
+                addLog("Te divet careka din tekevi? (y/n): " + val);
+                if (val.toLowerCase() === 'y') {
+                    step = "USER";
+                    promptText.textContent = "Username daxil bike: ";
+                } else {
+                    addLog("Spas bo bikaranina sistema Ali Baba!");
+                    termInput.disabled = true;
+                    promptText.textContent = "> Process finished.";
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
