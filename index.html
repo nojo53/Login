@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازاڕا کوردی | Kurd Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2c;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+            --header-bg: rgba(21, 28, 44, 0.85);
+            --primary-light: #1e1b4b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .search-container {
+            flex: 0 1 400px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        button, .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+            transform: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hero-banner h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-banner p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-btn {
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: var(--border-color);
+        }
+
+        .product-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            width: max-content;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #10b981;
+            margin-bottom: 1.25rem;
+        }
+
+        .product-body button {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .badge-count {
+            background-color: #ef4444;
+            color: white;
+            border-radius: 9999px;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .otp-box {
+            background-color: var(--primary-light);
+            border: 1px dashed var(--primary);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .otp-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .otp-box strong {
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <header>
+        <div class="logo">🛍️ بازاڕا کوردی</div>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="گەڕیان ل بەرهەمان..." oninput="handleSearch()">
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-secondary" onclick="toggleTheme()">🌙 مۆد</button>
+            <button class="btn-secondary" onclick="openCartModal()">🛒 سەبەتە <span id="cart-count" class="badge-count">0</span></button>
+            <button class="btn" onclick="openAdminModal()">⚙️ ئادمین</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-banner">
+            <h1>بخێر بێی بۆ بازاڕا کوردی!</h1>
+            <p>سەرکەفتیترین بسترەی کڕین و فرۆشتنێ - گەهاندن بۆ هەمی باژێران.</p>
+        </div>
+
+        <div class="filters" id="category-filters">
+            <button class="filter-btn active" onclick="filterProducts('all')">هەمی</button>
+            <button class="filter-btn" onclick="filterProducts('جلوبەرگ')">جلوبەرگ</button>
+            <button class="filter-btn" onclick="filterProducts('ئەلیکترۆنیات')">ئەلیکترۆنیات</button>
+            <button class="filter-btn" onclick="filterProducts('کەلەپۆڕێن ناڤمالێ')">کەلەپۆڕێن ناڤمالێ</button>
+            <button class="filter-btn" onclick="filterProducts('اکسسوار')">اکسسوار</button>
+        </div>
+
+        <div class="products-grid" id="products-grid">
+            <!-- Products injected by JS -->
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>سەبەتەیا بازاڕکرنێ</h2>
+                <button class="close-btn" onclick="closeCartModal()">&times;</button>
+            </div>
+            <div id="cart-items-container">
+                <!-- Cart items here -->
+            </div>
+            <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <h3>تێکرا: <span id="cart-total" style="color: #10b981;">0</span> د.ع</h3>
+            </div>
+            
+            <div style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 0.75rem;">زانیاریێن گەهاندنێ (Cash on Delivery)</h3>
+                <div class="form-group">
+                    <label>ناڤێ تە یێ تەمام</label>
+                    <input type="text" id="customer-name" class="form-control" placeholder="بۆ نموونە: ئارام ئەحمەد">
+                </div>
+                <div class="form-group">
+                    <label>ژمارەیا تەلەفۆنێ (ڕاستەقینە)</label>
+                    <input type="text" id="customer-phone" class="form-control" placeholder="0750XXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label>باژێر</label>
+                    <select id="customer-city" class="form-control">
+                        <option value="دهۆک">دهۆک</option>
+                        <option value="هەولێر">هەولێر</option>
+                        <option value="سلێمانی">سلێمانی</option>
+                        <option value="بەغدا">بەغدا</option>
+                        <option value="زاخۆ">زاخۆ</option>
+                        <option value="ئاکرێ">ئاکرێ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ناڤنیشان (کولان و خانوو)</label>
+                    <textarea id="customer-address" class="form-control" rows="2" placeholder="ناڤنیشانەکا دیار بنڤێسە"></textarea>
+                </div>
+
+                <!-- Step 1: Request Verification Code -->
+                <div id="otp-request-step">
+                    <button class="btn" style="width: 100%; margin-top: 1rem;" onclick="sendOTPCode()">🔒 نێرنا کۆدێ سەلماندنێ بۆ مۆبایلێ</button>
+                </div>
+
+                <!-- Step 2: Verification Input Form -->
+                <div id="otp-verify-step" style="display: none;">
+                    <div class="otp-box">
+                        <p>کۆدێ سەلماندنێ یێ ٤ ڕەقەمی بۆ ژمارا تە هاتە ناردن!</p>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">(بۆ تستکرنێ، کۆدێ تە ل سەر شاشێ: <strong id="generated-otp-display" style="font-size: 1rem;">----</strong>)</p>
+                    </div>
+                    <div class="form-group">
+                        <label>کۆدێ ٤ ڕەقەمی بنڤێسە</label>
+                        <input type="text" id="otp-input" class="form-control" placeholder="X X X X" maxlength="4" style="text-align: center; font-size: 1.2rem; letter-spacing: 5px;">
+                    </div>
+                    <button class="btn" style="width: 100%; margin-top: 0.5rem; background-color: #10b981;" onclick="verifyAndCheckout()">پشتڕاستکرن و تۆمارکرنا داواکاریێ</button>
+                    <button class="btn-secondary" style="width: 100%; margin-top: 0.5rem;" onclick="cancelOTP()">پاشگەزبوونەوە</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login / Panel Modal -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="admin-modal-title">چوونەژوورا ئادمینی</h2>
+                <button class="close-btn" onclick="closeAdminModal()">&times;</button>
+            </div>
+            <div id="admin-login-section">
+                <div class="form-group">
+                    <label>تێپەڕەپەیڤا ئادمینی (Password)</label>
+                    <input type="password" id="admin-password-input" class="form-control" placeholder="پاسوۆرد بنڤێسە">
+                </div>
+                <button class="btn" style="width: 100%;" onclick="adminLogin()">چوونەژوور</button>
+            </div>
+            <div id="admin-dashboard-section" style="display: none;">
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <button class="btn" onclick="switchAdminTab('products')">بەرهەم</button>
+                    <button class="btn btn-secondary" onclick="switchAdminTab('settings')">سێٹنگسێن بۆتی</button>
+                    <button class="btn btn-secondary" style="background-color: #ef4444; color: white;" onclick="adminLogout()">چوونەدەر</button>
+                </div>
+
+                <!-- Products Management Tab -->
+                <div id="admin-tab-products">
+                    <h3>زێدەکرنا بەرهەمەکێ نوی</h3>
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label>ناڤێ بەرهەمی</label>
+                        <input type="text" id="new-p-name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>پۆل (Category)</label>
+                        <select id="new-p-cat" class="form-control">
+                            <option value="جلوبەرگ">جلوبەرگ</option>
+                            <option value="ئەلیکترۆنیات">ئەلیکترۆنیات</option>
+                            <option value="کەلەپۆڕێن ناڤمالێ">کەلەپۆڕێن ناڤمالێ</option>
+                            <option value="اکسسوار">اکسسوار</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>نرخ (ب دینار)</label>
+                        <input type="number" id="new-p-price" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>لینکا وێنەی (URL)</label>
+                        <input type="text" id="new-p-img" class="form-control" placeholder="https://...">
+                    </div>
+                    <button class="btn" style="width: 100%;" onclick="addNewProduct()">زێدەکرنا بەرهەمی</button>
+
+                    <h3 style="margin-top: 1.5rem;">لسیتا بەرهەمان</h3>
+                    <div id="admin-products-list" style="margin-top: 0.5rem; max-height: 200px; overflow-y: auto;"></div>
+                </div>
+
+                <!-- Telegram Bot Settings Tab -->
+                <div id="admin-tab-settings" style="display: none;">
+                    <h3>رێکخستنا بۆتێ تلێگرامێ</h3>
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label>Telegram Bot Token</label>
+                        <input type="text" id="bot-token-input" class="form-control" placeholder="123456:ABC-DEF...">
+                    </div>
+                    <div class="form-group">
+                        <label>Telegram Chat ID</label>
+                        <input type="text" id="chat-id-input" class="form-control" placeholder="-100xxxxxxxxxx">
+                    </div>
+                    <button class="btn" style="width: 100%; margin-bottom: 0.5rem;" onclick="saveTelegramSettings()">پاشەکەوتکرنا سێٹنگسان</button>
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="testTelegramBot()">تستکرنا بۆتی (نێرنا پەیاما تاقیكاری)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let products = JSON.parse(localStorage.getItem('shop_products')) || [
+            { id: 1, name: 'کەتانی وەرزشی مۆدێرن', category: 'جلوبەرگ', price: 35000, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500' },
+            { id: 2, name: 'سەعاتا زیرەک Smart Watch', category: 'ئەلیکترۆنیات', price: 45000, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500' },
+            { id: 3, name: 'سێتێ قاوەخۆریا مالێ', category: 'کەلەپۆڕێن ناڤمالێ', price: 25000, image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500' },
+            { id: 4, name: 'عەینکێن رۆژێ ڕەسەن', category: 'اکسسوار', price: 15000, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500' }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('shop_cart')) || [];
+        let isAdminLoggedIn = false;
+        let currentCategory = 'all';
+        let generatedOTP = null;
+
+        let botToken = localStorage.getItem('tg_bot_token') || '';
+        let chatId = localStorage.getItem('tg_chat_id') || '';
+
+        function saveProducts() {
+            localStorage.setItem('shop_products', JSON.stringify(products));
+        }
+
+        function saveCart() {
+            localStorage.setItem('shop_cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-count').innerText = totalItems;
+        }
+
+        function renderProducts(filterCat = currentCategory, searchQuery = '') {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            
+            let filtered = filterCat === 'all' ? products : products.filter(p => p.category === filterCat);
+            
+            if(searchQuery) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+            }
+
+            if(filtered.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">چ بەرهەم ب ڤان زانیاریان نەهاتنە دیتن.</p>';
+                return;
+            }
+
+            filtered.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.image}" class="product-img" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                        <div class="product-body">
+                            <span class="product-category">${p.category}</span>
+                            <div class="product-title">${p.name}</div>
+                            <div class="product-price">${Number(p.price).toLocaleString()} د.ع</div>
+                            <button class="btn" onclick="addToCart(${p.id})">زێدەکرن بۆ سەبەتەیێ</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProducts(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const query = document.getElementById('search-input').value.trim();
+            renderProducts(cat, query);
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            renderProducts(currentCategory, query);
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            if(existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            saveCart();
+            alert('کەلەپۆڕ بۆ سەبەتەیێ هاتە زێدەکرن!');
+        }
+
+        function openCartModal() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            
+            if(cart.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 1rem;">سەبەتەیا تە یا ڤالایە.</p>';
+                document.getElementById('cart-total').innerText = '0';
+                document.getElementById('cart-modal').style.display = 'flex';
+                cancelOTP();
+                return;
+            }
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price * item.qty;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small style="color: var(--text-muted);">${Number(item.price).toLocaleString()} د.ع × ${item.qty}</small>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <button class="btn-secondary" style="padding: 0.2rem 0.6rem;" onclick="changeQty(${index}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="btn-secondary" style="padding: 0.2rem 0.6rem;" onclick="changeQty(${index}, 1)">+</button>
+                            <button class="btn-secondary" style="padding: 0.2rem 0.6rem; color: #ef4444; border-color: #ef4444;" onclick="removeFromCart(${index})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('cart-total').innerText = total.toLocaleString();
+            document.getElementById('cart-modal').style.display = 'flex';
+        }
+
+        function closeCartModal() {
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+
+        function changeQty(index, change) {
+            cart[index].qty += change;
+            if(cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            saveCart();
+            openCartModal();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            openCartModal();
+        }
+
+        // Send OTP Code
+        async function sendOTPCode() {
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
+
+            if(!name || !phone || !address) {
+                alert('هەمی زانیاریێن گەهاندنێ پڕ بکە (ناڤ، ژمارە و ناڤنیشان)!');
+                return;
+            }
+
+            if(phone.length < 10) {
+                alert('تکایە ژمارەکا مۆبایلێ یا دروست و ڕاستەقینە بنڤێسە!');
+                return;
+            }
+
+            // Generate 4-digit OTP
+            generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('generated-otp-display').innerText = generatedOTP;
+
+            // Notify Telegram Admin about OTP dispatch
+            if(botToken && chatId) {
+                try {
+                    let otpText = `🔑 *کۆدێ سەلماندنێ یێ ٤ ڕەقەمی چێبوو!*%0A👤 ناڤ: ${name}%0A📞 ژمارە: ${phone}%0A🔢 کۆدێ OTP: \`${generatedOTP}\``;
+                    let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${otpText}&parse_mode=Markdown`;
+                    await fetch(url);
+                } catch(e) {
+                    console.log('OTP send error:', e);
+                }
+            }
+
+            document.getElementById('otp-request-step').style.display = 'none';
+            document.getElementById('otp-verify-step').style.display = 'block';
+        }
+
+        function cancelOTP() {
+            generatedOTP = null;
+            document.getElementById('otp-request-step').style.display = 'block';
+            document.getElementById('otp-verify-step').style.display = 'none';
+            document.getElementById('otp-input').value = '';
+        }
+
+        async function verifyAndCheckout() {
+            const userOTP = document.getElementById('otp-input').value.trim();
+
+            if(!userOTP || userOTP !== generatedOTP) {
+                alert('کۆدێ سەلماندنێ خەلەتە! تکایە کۆدێ ٤ ڕەقەمی د دروستی دا داخڵ بکە.');
+                return;
+            }
+
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const city = document.getElementById('customer-city').value;
+            const address = document.getElementById('customer-address').value.trim();
+
+            let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let orderText = `✅ *داواکاریەکا بەرپسیار (سەلماندیی ب OTP) هاته کرن!*%0A%0A`;
+            orderText += `👤 *ناڤ:* ${name}%0A`;
+            orderText += `📞 *ژمارە:* ${phone} (پشتڕاستکری)%0A`;
+            orderText += `🏙️ *باژێر:* ${city}%0A`;
+            orderText += `📍 *ناڤنیشان:* ${address}%0A`;
+            orderText += `💵 *پێدانا پارەی:* Cash on Delivery (دەست ب دەست)%0A%0A`;
+            orderText += `📦 *لسیتا کەلەپۆڕان:*%0A`;
+
+            cart.forEach((item, i) => {
+                orderText += `${i+1}. ${item.name} (${item.qty}x) - ${(item.price * item.qty).toLocaleString()} د.ع%0A`;
+            });
+
+            orderText += `%0A💰 *تێکرا گشتی:* ${total.toLocaleString()} د.ع`;
+
+            if(botToken && chatId) {
+                try {
+                    let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(orderText)}&parse_mode=Markdown`;
+                    await fetch(url);
+                } catch(e) {
+                    console.log('Telegram send error:', e);
+                }
+            }
+
+            let waText = `سڵاو، من ڤان کەلەپۆڕان دەمەوێت (ژمارەیا من سەلماندییە):%0A` + orderText;
+            window.open(`https://wa.me/?text=${waText}`, '_blank');
+
+            alert('ژمارەیا تە ب سەرکەفتی هاتە سەلماندن و داواکاریا تە هاتە تۆمارکرن!');
+            cart = [];
+            saveCart();
+            cancelOTP();
+            closeCartModal();
+        }
+
+        // Admin Functions
+        function openAdminModal() {
+            if(isAdminLoggedIn) {
+                showAdminDashboard();
+            } else {
+                document.getElementById('admin-login-section').style.display = 'block';
+                document.getElementById('admin-dashboard-section').style.display = 'none';
+                document.getElementById('admin-modal-title').innerText = 'چوونەژوورا ئادمینی';
+            }
+            document.getElementById('admin-modal').style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+        }
+
+        function adminLogin() {
+            const pass = document.getElementById('admin-password-input').value;
+            if(pass === 'noJdar12$$') {
+                isAdminLoggedIn = true;
+                showAdminDashboard();
+            } else {
+                alert('تێپەڕەپەیڤ خەلەتە!');
+            }
+        }
+
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-password-input').value = '';
+            openAdminModal();
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('admin-login-section').style.display = 'none';
+            document.getElementById('admin-dashboard-section').style.display = 'block';
+            document.getElementById('admin-modal-title').innerText = 'داشبۆردا ئادمینی';
+            
+            document.getElementById('bot-token-input').value = botToken;
+            document.getElementById('chat-id-input').value = chatId;
+            renderAdminProductsList();
+        }
+
+        function switchAdminTab(tab) {
+            if(tab === 'products') {
+                document.getElementById('admin-tab-products').style.display = 'block';
+                document.getElementById('admin-tab-settings').style.display = 'none';
+            } else {
+                document.getElementById('admin-tab-products').style.display = 'none';
+                document.getElementById('admin-tab-settings').style.display = 'block';
+            }
+        }
+
+        function addNewProduct() {
+            const name = document.getElementById('new-p-name').value.trim();
+            const category = document.getElementById('new-p-cat').value;
+            const price = Number(document.getElementById('new-p-price').value);
+            const image = document.getElementById('new-p-img').value.trim() || 'https://via.placeholder.com/300';
+
+            if(!name || !price) {
+                alert('ناڤێ بەرهەمی و نرخی پڕ بکە!');
+                return;
+            }
+
+            const newProduct = {
+                id: Date.now(),
+                name,
+                category,
+                price,
+                image
+            };
+
+            products.push(newProduct);
+            saveProducts();
+            renderProducts();
+            renderAdminProductsList();
+
+            document.getElementById('new-p-name').value = '';
+            document.getElementById('new-p-price').value = '';
+            document.getElementById('new-p-img').value = '';
+            alert('بەرهەم ب سەرکەفتی هاتە زێدەکرن!');
+        }
+
+        function renderAdminProductsList() {
+            const listContainer = document.getElementById('admin-products-list');
+            listContainer.innerHTML = '';
+            
+            if(products.length === 0) {
+                listContainer.innerHTML = '<p>چ بەرهەم نینن.</p>';
+                return;
+            }
+
+            products.forEach((p) => {
+                listContainer.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                        <span>${p.name} - ${Number(p.price).toLocaleString()} د.ع</span>
+                        <button class="btn-secondary" style="padding: 0.2rem 0.5rem; color: #ef4444; border-color: #ef4444;" onclick="deleteProduct(${p.id})">سڕینەوە</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            saveProducts();
+            renderProducts();
+            renderAdminProductsList();
+        }
+
+        function saveTelegramSettings() {
+            botToken = document.getElementById('bot-token-input').value.trim();
+            chatId = document.getElementById('chat-id-input').value.trim();
+            localStorage.setItem('tg_bot_token', botToken);
+            localStorage.setItem('tg_chat_id', chatId);
+            alert('سێٹنگسێن بۆتی ب سەرکەفتی هاتنە پاشەکەوتکرن!');
+        }
+
+        async function testTelegramBot() {
+            if(!botToken || !chatId) {
+                alert('پێش هەمی تشتەکێ Token و Chat ID بنڤێسە و پاشەکەوت بکە!');
+                return;
+            }
+            try {
+                let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent('🟢 تستا بۆتی: سیستەمێ بازاڕا کوردی ب سەرکەفتی کار دکەت!')}`;
+                let res = await fetch(url);
+                let data = await res.json();
+                if(data.ok) {
+                    alert('پەیاما تستێ ب سەرکەفتی گەهشتە تلێگرامێ!');
+                } else {
+                    alert('خەلەتی د زانیاریێن بۆتی دا هەیە: ' + data.description);
+                }
+            } catch(e) {
+                alert('ارسال ئەنجام نەدا، پەیوەندیا ئینتەرنێتێ پشکنە.');
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            if(currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+            }
+        }
+
+        updateCartCount();
+        renderProducts();
+    </script>
+</body>
+</html>
